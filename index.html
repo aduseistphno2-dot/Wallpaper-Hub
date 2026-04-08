@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Wallpaper Hub - HD Wallpapers</title>
+    
+ <!-- PWA Configuration - ALL 4 REQUIRED -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <!-- Google AdMob SDK -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2873861322360799" crossorigin="anonymous"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            padding-bottom: 70px;
+        }
+        
+        body.dark {
+            background: #1a1a2e;
+            color: white;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        body.dark .top-bar {
+            background: #1e293b;
+        }
+        
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .spacer {
+            width: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 12px 0 8px 0;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 0;
+            transition: all 0.2s;
+            color: #666;
+        }
+        
+        body.dark .tab-btn {
+            color: #aaa;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .search-box {
+            max-width: 100%;
+            display: flex;
+            background: #f0f0f0;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        body.dark .search-box {
+            background: #0f172a;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+        }
+        
+        body.dark .search-box input {
+            color: white;
+        }
+        
+        .search-box button {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        body.dark .side-menu {
+            background: #1e293b;
+        }
+        
+        .side-menu.open {
+            left: 0;
+        }
+        
+        .menu-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .menu-overlay.show {
+            display: block;
+        }
+        
+        .category-section {
+            margin: 20px 0;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 12px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .horizontal-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0 15px;
+            scrollbar-width: thin;
+        }
+        
+        .horizontal-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .category-chip {
+            display: inline-block;
+            padding: 8px 18px;
+            margin-right: 10px;
+            background: #e5e5e5;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        body.dark .category-chip {
+            background: #334155;
+            color: white;
+        }
+        
+        .category-chip:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 15px;
+        }
+        
+        .wallpaper-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        body.dark .wallpaper-card {
+            background: #1e293b;
+        }
+        
+        .wallpaper-card:active {
+            transform: scale(0.98);
+        }
+        
+        .wallpaper-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .favorite-btn.active {
+            background: #ff4757;
+        }
+        
+        .ad-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ad-dialog.show {
+            display: flex;
+        }
+        
+        .ad-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        body.dark .ad-card {
+            background: #1e293b;
+        }
+        
+        .ad-placeholder {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .timer-text {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #667eea;
+        }
+        
+        .done-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .done-btn:disabled {
+            opacity: 0.5;
+        }
+        
+        .celebration-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .celebration-dialog.show {
+            display: flex;
+        }
+        
+        .celebration-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .banner-ad {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 8px;
+            background: #0f172a;
+            z-index: 100;
+            border-top: 1px solid #ffd700;
+        }
+        
+        .ad-label {
+            font-size: 9px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal img {
+            max-width: 95%;
+            max-height: 65%;
+            border-radius: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .close-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #dc3545;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px;
+            text-align: center;
+        }
+        
+        .retry-btn {
+            background: white;
+            color: #dc3545;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .profile-section {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 15px;
+        }
+        
+        .edit-profile-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-modal.show {
+            display: flex;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        body.dark .auth-card {
+            background: #1e293b;
+        }
+        
+        .auth-card h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .auth-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            background: white;
+        }
+        
+        body.dark .auth-card input {
+            background: #0f172a;
+            border-color: #334155;
+            color: white;
+        }
+        
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .switch-auth {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #667eea;
+            cursor: pointer;
+        }
+        
+        .close-auth {
+            background: #dc3545 !important;
+            margin-top: 10px;
+        }
+        
+        .load-more-btn {
+            display: inline-block;
+            width: 100px;
+            margin-right: 12px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 40px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .load-more-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 60px;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            z-index: 1300;
+            animation: fadeInOut 2.5s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-row">
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="logo">🖼️ Wallpaper Hub</div>
+        <div class="spacer"></div>
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+        <button class="tab-btn" onclick="switchTab('categories')">Categories</button>
+        <button class="tab-btn" onclick="switchTab('popular')">Popular</button>
+        <button class="tab-btn" onclick="switchTab('profile')">Profile</button>
+    </div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search wallpapers...">
+        <button onclick="searchWallpapers()">🔍</button>
+    </div>
+</div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-header">
+        <span class="logo">📱 Menu</span>
+        <span class="close-menu" onclick="toggleMenu()">✕</span>
+    </div>
+    <div class="profile-section" id="menuUserSection">
+        <div class="profile-avatar" id="menuAvatar">G</div>
+        <div style="font-size: 18px; font-weight: 600;" id="menuUserName">Guest</div>
+        <div id="menuAuthButtons">
+            <button class="edit-profile-btn" onclick="showAuthModal()">Sign In / Sign Up</button>
+        </div>
+        <div id="menuUserInfo" style="display:none;">
+            <div style="display: flex; justify-content: center; gap: 30px; margin: 15px 0;">
+                <div><div class="stat-number" id="profileFavCount">0</div><div>Favorites</div></div>
+                <div><div class="stat-number" id="profileDownloadCount">0</div><div>Downloads</div></div>
+            </div>
+            <button class="edit-profile-btn" onclick="showFavorites()">❤️ My Favorites</button>
+            <button class="edit-profile-btn" onclick="logout()" style="background:#dc3545;">Logout</button>
+        </div>
+    </div>
+    <button class="edit-profile-btn" onclick="toggleDarkMode(); toggleMenu();" style="width: calc(100% - 40px); margin: 10px 20px;">🌙 Dark Mode</button>
+</div>
+
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<div id="homeTab" class="tab-content">
+    <div class="category-section">
+        <div class="section-header"><div class="section-title"><span>🔥</span> TRENDING WALLPAPERS</div></div>
+        <div class="horizontal-scroll" id="trendingRow"></div>
+    </div>
+    <div class="category-section">
+        <div class="section-header"><div class="section-title"><span>🆕</span> NEW ARRIVALS</div></div>
+        <div class="horizontal-scroll" id="newArrivalsRow"></div>
+    </div>
+    <div class="category-section">
+        <div class="section-header"><div class="section-title"><span>⭐</span> MOST POPULAR</div></div>
+        <div class="horizontal-scroll" id="popularRow"></div>
+    </div>
+    <div class="category-section">
+        <div class="section-header"><div class="section-title"><span>🏆</span> EDITOR'S CHOICE</div></div>
+        <div class="horizontal-scroll" id="editorsChoiceRow"></div>
+    </div>
+</div>
+
+<div id="categoriesTab" class="tab-content" style="display: none;">
+    <div id="categoriesContainer"></div>
+</div>
+
+<div id="popularTab" class="tab-content" style="display: none;">
+    <div class="wallpaper-grid" id="popularGrid"><div class="loading"><div class="loading-spinner"></div><p>Loading popular wallpapers...</p></div></div>
+</div>
+
+<div id="profileTab" class="tab-content" style="display: none;">
+    <div class="profile-section">
+        <div class="profile-avatar" id="profileAvatar">G</div>
+        <div style="font-size: 24px; font-weight: 600;" id="profileName">Guest</div>
+        <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+            <div><div class="stat-number" id="profileFavCount2">0</div><div>Favorites</div></div>
+            <div><div class="stat-number" id="profileDownloadCount2">0</div><div>Downloads</div></div>
+        </div>
+        <button class="edit-profile-btn" onclick="showFavorites()">❤️ My Favorites</button>
+        <button class="edit-profile-btn" onclick="showAuthModal()" id="profileAuthBtn">Sign In / Sign Up</button>
+        <button class="edit-profile-btn" onclick="logout()" id="profileLogoutBtn" style="display:none; background:#dc3545;">Logout</button>
+    </div>
+</div>
+
+<div class="auth-modal" id="authModal">
+    <div class="auth-card">
+        <h2 id="authTitle">Sign In</h2>
+        <input type="text" id="authName" placeholder="Full Name" style="display:none;">
+        <input type="email" id="authEmail" placeholder="Email">
+        <input type="password" id="authPassword" placeholder="Password">
+        <div id="authError" style="color:#ff6b6b; font-size:12px;"></div>
+        <button id="authActionBtn" onclick="handleAuth()">Sign In</button>
+        <div class="switch-auth" id="switchAuth" onclick="toggleAuthMode()">Don't have an account? Sign Up</div>
+        <button class="close-auth" onclick="closeAuthModal()">Cancel</button>
+    </div>
+</div>
+
+<div class="ad-dialog" id="adDialog">
+    <div class="ad-card">
+        <div style="font-size: 48px;">📺</div>
+        <h3>Advertisement</h3>
+        <div class="ad-placeholder">
+            <p>✨ Your download is complete! ✨</p>
+            <p>Thank you for supporting Wallpaper Hub</p>
+        </div>
+        <div class="timer-text" id="timerText">5</div>
+        <button class="done-btn" id="doneBtn" onclick="closeAd()" disabled>Please wait...</button>
+    </div>
+</div>
+
+<div class="celebration-dialog" id="celebrationDialog">
+    <div class="celebration-card">
+        <div style="font-size: 64px;">🎉</div>
+        <h2>Congratulations!</h2>
+        <p style="margin: 15px 0;">You've downloaded <span id="downloadCountDisplay">3</span> wallpapers!</p>
+        <button class="edit-profile-btn" onclick="closeCelebration()" style="background: white; color: #667eea;">Continue</button>
+    </div>
+</div>
+
+<div class="banner-ad">
+    <div class="ad-label">📢 Advertisement</div>
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-pub-2873861322360799" data-ad-slot="9851692098"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="footer">
+    <p>Images provided by <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a> & <a href="https://pixabay.com" target="_blank" rel="noopener noreferrer">Pixabay</a></p>
+    <p><a href="privacy.html">Privacy Policy</a> | © 2026 Wallpaper Hub. All rights reserved.</p>
+</div>
+
+<div class="modal" id="modal">
+    <img id="modalImage" src="">
+    <div class="modal-buttons">
+        <button class="modal-btn download-btn" onclick="downloadWallpaper()">📥 Download</button>
+        <button class="modal-btn close-btn" onclick="closeModal()">✖ Close</button>
+    </div>
+</div>
+
+<script>
+    // ========== API KEYS ==========
+    const PEXELS_API_KEY = 'FEB6b260Cj8tYx1pWVZJB4tKmvi7ApxuUs1TjgePumTsUzj0ukCXTZy4';
+    const PIXABAY_API_KEY = '46799549-7d046d20ae4410ea4885e5354';
+    
+    // ========== APP STATE ==========
+    let currentUser = null;
+    let authMode = 'login';
+    let favorites = [];
+    let currentMediaUrl = '';
+    let downloadCount = parseInt(localStorage.getItem('totalDownloads') || '0');
+    let adTimer = null;
+    let currentCategoryQuery = '';
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMore = true;
+    
+    // Store loaded counts for each row
+    let rowLoadedCounts = {
+        trendingRow: 0,
+        newArrivalsRow: 0,
+        popularRow: 0,
+        editorsChoiceRow: 0
+    };
+    
+    // ========== ALL CATEGORIES ==========
+    const categories = {
+        '🔥 Trending': ['trending', 'popular', 'viral', 'top wallpaper'],
+        '🎨 Creative Styles': ['3d wallpaper', 'abstract', 'minimalist', 'gradient', 'neon', 'aesthetic', 'glass effect', 'pattern', 'retro', 'vintage'],
+        '🌍 Nature': ['nature', 'mountains', 'sky', 'ocean', 'space', 'flowers', 'weather', 'forest', 'sunset', 'beach', 'waterfall', 'stars', 'moon', 'sunrise'],
+        '🚗 Lifestyle': ['cars', 'motorcycles', 'city', 'food', 'fashion', 'architecture', 'travel', 'sports', 'bikes', 'luxury'],
+        '🎮 Entertainment': ['gaming', 'anime', 'cartoon', 'movies', 'music', 'kpop', 'marvel', 'dc', 'harry potter', 'star wars'],
+        '🐾 Animals': ['animals', 'wild animals', 'dogs', 'cats', 'birds', 'pets', 'butterflies', 'lions', 'tigers', 'elephants', 'wolves'],
+        '💡 Inspiration': ['love', 'motivation', 'quotes', 'inspiration', 'success', 'positive', 'peace', 'hope', 'dream'],
+        '🌑 Dark Themes': ['dark', 'amoled', 'black', 'horror', 'fantasy', 'fire', 'skull', 'gothic', 'mystery', 'nightmare'],
+        '🎨 Colors': ['red', 'blue', 'black', 'white', 'green', 'purple', 'pink', 'yellow', 'orange', 'gold', 'silver', 'rainbow'],
+        '🧸 Kids': ['kids', 'toys', 'unicorn', 'rainbow', 'cartoon characters', 'princess', 'superhero', 'dinosaur', 'robot', 'spongebob'],
+        '🎄 Seasonal': ['christmas', 'easter', 'halloween', 'new year', 'valentine', 'summer', 'winter', 'spring', 'autumn', 'thanksgiving'],
+        '💻 Tech': ['technology', 'cyberpunk', 'futuristic', 'robots', 'ai art', 'digital art', 'code', 'hacker', 'matrix', 'glitch'],
+        '✝️ Religious': ['bible', 'jesus', 'prayer', 'faith', 'church', 'islamic', 'quran', 'god', 'spiritual', 'meditation'],
+        '✨ Special': ['clock', 'parallax', '4k', '8k', 'hdr', 'geometric', 'mandala', 'watercolor', 'oil painting', 'sketch']
+    };
+    
+    // ========== TOAST ==========
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        if (isError) toast.style.background = '#dc3545';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+    
+    // ========== AD SYSTEM ==========
+    function showAdAfterDownload() {
+        const adDialog = document.getElementById('adDialog');
+        const timerText = document.getElementById('timerText');
+        const doneBtn = document.getElementById('doneBtn');
+        let timeLeft = 5;
+        
+        adDialog.classList.add('show');
+        timerText.textContent = timeLeft;
+        doneBtn.disabled = true;
+        doneBtn.textContent = '⏳ Please wait...';
+        
+        if (adTimer) clearInterval(adTimer);
+        
+        adTimer = setInterval(() => {
+            timeLeft--;
+            timerText.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(adTimer);
+                timerText.textContent = '✓';
+                doneBtn.disabled = false;
+                doneBtn.textContent = 'DONE';
+            }
+        }, 1000);
+    }
+    
+    function closeAd() {
+        const doneBtn = document.getElementById('doneBtn');
+        if (doneBtn.disabled) {
+            showToast('Please wait for ad to complete');
+            return;
+        }
+        clearInterval(adTimer);
+        document.getElementById('adDialog').classList.remove('show');
+        showToast('Thank you for supporting Wallpaper Hub!');
+    }
+    
+    // ========== DOWNLOAD ==========
+    function downloadWallpaper() {
+        if (!currentMediaUrl) return;
+        showToast('📥 Downloading wallpaper...');
+        
+        fetch(currentMediaUrl).then(r => r.blob()).then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wallpaper_${Date.now()}.jpg`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            downloadCount++;
+            localStorage.setItem('totalDownloads', downloadCount);
+            if (currentUser) {
+                currentUser.downloadCount = downloadCount;
+                saveUserData();
+                updateUI();
+            }
+            closeModal();
+            showToast('✅ Wallpaper saved!');
+            if (downloadCount % 3 === 0) showCelebration(downloadCount);
+            setTimeout(() => showAdAfterDownload(), 500);
+        }).catch(() => {
+            window.open(currentMediaUrl, '_blank');
+            downloadCount++;
+            localStorage.setItem('totalDownloads', downloadCount);
+            if (downloadCount % 3 === 0) showCelebration(downloadCount);
+            closeModal();
+            setTimeout(() => showAdAfterDownload(), 500);
+        });
+    }
+    
+    function showCelebration(count) {
+        document.getElementById('downloadCountDisplay').innerText = count;
+        document.getElementById('celebrationDialog').classList.add('show');
+        setTimeout(() => closeCelebration(), 3000);
+    }
+    
+    function closeCelebration() {
+        document.getElementById('celebrationDialog').classList.remove('show');
+    }
+    
+    // ========== TAB SWITCHING ==========
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        if (tab === 'home') {
+            document.getElementById('homeTab').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        } else if (tab === 'categories') {
+            document.getElementById('categoriesTab').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            renderCategories();
+        } else if (tab === 'popular') {
+            document.getElementById('popularTab').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[2].classList.add('active');
+            loadPopularWallpapers();
+        } else if (tab === 'profile') {
+            document.getElementById('profileTab').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[3].classList.add('active');
+            updateProfileUI();
+        }
+    }
+    
+    // ========== CATEGORIES ==========
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        let html = '';
+        for (const [sectionName, categoryList] of Object.entries(categories)) {
+            html += `<div class="category-section"><div class="section-header"><div class="section-title">${sectionName}</div></div><div class="horizontal-scroll">`;
+            for (const cat of categoryList) {
+                html += `<span class="category-chip" onclick="loadCategoryWallpapers('${cat.replace(/'/g, "\\'")}')">${getCategoryIcon(cat)} ${cat.toUpperCase()}</span>`;
+            }
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+    }
+    
+    function getCategoryIcon(cat) {
+        const icons = {
+            '3d wallpaper': '🧊', 'abstract': '🎭', 'minimalist': '⚪', 'gradient': '🌈',
+            'neon': '💡', 'aesthetic': '✨', 'nature': '🌿', 'mountains': '⛰️', 'ocean': '🌊',
+            'space': '🌌', 'cars': '🚗', 'anime': '🎌', 'gaming': '🎮', 'dark': '🌑',
+            'love': '❤️', 'motivation': '💬', 'christmas': '🎄', 'animals': '🐾'
+        };
+        return icons[cat] || '🖼️';
+    }
+    
+    async function loadCategoryWallpapers(query) {
+        currentCategoryQuery = query;
+        currentPage = 1;
+        hasMore = true;
+        switchTab('popular');
+        const grid = document.getElementById('popularGrid');
+        grid.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading ' + query + ' wallpapers...</p></div>';
+        await loadMoreWallpapers(query, 1, true);
+    }
+    
+    async function loadMoreWallpapers(query, page, reset = false) {
+        if (isLoading) return;
+        isLoading = true;
+        const grid = document.getElementById('popularGrid');
+        try {
+            const [pexels, pixabay] = await Promise.all([fetchFromPexels(query, page), fetchFromPixabay(query, page)]);
+            let results = [...pexels, ...pixabay];
+            results = results.filter((w, i, self) => i === self.findIndex(x => x.url === w.url));
+            if (reset) grid.innerHTML = '';
+            if (results.length === 0 && reset) {
+                grid.innerHTML = '<div class="loading">No wallpapers found for "' + query + '"</div>';
+                isLoading = false;
+                return;
+            }
+            results.forEach(wall => {
+                const isFavorite = favorites.includes(wall.fullUrl);
+                const card = document.createElement('div');
+                card.className = 'wallpaper-card';
+                card.onclick = () => openMedia(wall.fullUrl);
+                card.innerHTML = `<img src="${wall.url}" loading="lazy"><button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${wall.fullUrl}', this)">❤️</button>`;
+                grid.appendChild(card);
+            });
+            hasMore = results.length >= 20;
+            if (hasMore) {
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting && hasMore && !isLoading) {
+                        currentPage++;
+                        loadMoreWallpapers(query, currentPage, false);
+                    }
+                });
+                const sentinel = document.createElement('div');
+                sentinel.style.height = '20px';
+                grid.appendChild(sentinel);
+                observer.observe(sentinel);
+            }
+        } catch(e) {
+            if (reset) grid.innerHTML = '<div class="error-message">Error loading. Check connection.<br><button class="retry-btn" onclick="loadCategoryWallpapers(\'' + query + '\')">Retry</button></div>';
+        }
+        isLoading = false;
+    }
+    
+    // ========== API FUNCTIONS ==========
+    async function fetchFromPexels(query, page) {
+        try {
+            const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20&page=${page}`, {
+                headers: { 'Authorization': PEXELS_API_KEY }
+            });
+            if (!response.ok) return [];
+            const data = await response.json();
+            return data.photos?.map(photo => ({ url: photo.src.medium, fullUrl: photo.src.original })) || [];
+        } catch(e) { return []; }
+    }
+    
+    async function fetchFromPixabay(query, page) {
+        try {
+            const response = await fetch(`https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(query)}&per_page=20&page=${page}&image_type=photo&safesearch=true`);
+            if (!response.ok) return [];
+            const data = await response.json();
+            return data.hits?.map(hit => ({ url: hit.webformatURL, fullUrl: hit.largeImageURL })) || [];
+        } catch(e) { return []; }
+    }
+    
+    // ========== OPTIMIZED ROW LOADER (Shows 20 first, then Load More) ==========
+    async function loadRowWallpapers(query, rowId) {
+        const row = document.getElementById(rowId);
+        if (!row) return;
+        
+        row.innerHTML = '<span style="padding:10px;">Loading...</span>';
+        rowLoadedCounts[rowId] = 0;
+        
+        try {
+            const [pexels, pixabay] = await Promise.all([fetchFromPexels(query, 1), fetchFromPixabay(query, 1)]);
+            let results = [...pexels, ...pixabay];
+            results = results.filter((w, i, self) => i === self.findIndex(x => x.url === w.url));
+            
+            row.innerHTML = '';
+            const initialCount = Math.min(20, results.length);
+            
+            for (let i = 0; i < initialCount; i++) {
+                const wall = results[i];
+                const isFavorite = favorites.includes(wall.fullUrl);
+                const card = document.createElement('div');
+                card.style.display = 'inline-block';
+                card.style.width = '150px';
+                card.style.marginRight = '12px';
+                card.style.borderRadius = '16px';
+                card.style.overflow = 'hidden';
+                card.style.cursor = 'pointer';
+                card.style.position = 'relative';
+                card.onclick = () => openMedia(wall.fullUrl);
+                card.innerHTML = `<img src="${wall.url}" style="width:100%; height:120px; object-fit:cover;"><button class="favorite-btn ${isFavorite ? 'active' : ''}" style="position:absolute; top:5px; right:5px; width:28px; height:28px; font-size:14px;" onclick="event.stopPropagation(); toggleFavorite('${wall.fullUrl}', this)">❤️</button>`;
+                row.appendChild(card);
+            }
+            
+            rowLoadedCounts[rowId] = initialCount;
+            
+            if (results.length > initialCount) {
+                const loadMoreBtn = document.createElement('div');
+                loadMoreBtn.className = 'load-more-btn';
+                loadMoreBtn.innerHTML = 'Load More →';
+                loadMoreBtn.onclick = () => loadMoreRowWallpapers(query, rowId, results.slice(initialCount));
+                row.appendChild(loadMoreBtn);
+            }
+        } catch(e) { 
+            row.innerHTML = '<span style="padding:10px;">Error loading</span>';
+            console.error(e);
+        }
+    }
+    
+    async function loadMoreRowWallpapers(query, rowId, remainingResults) {
+        const row = document.getElementById(rowId);
+        const loadMoreBtn = row.querySelector('.load-more-btn');
+        if (loadMoreBtn) loadMoreBtn.remove();
+        
+        row.innerHTML += '<span style="padding:10px; display:inline-block;">Loading more...</span>';
+        
+        try {
+            const nextBatch = remainingResults.slice(0, 20);
+            
+            const loadingMsg = row.querySelector('span:last-child');
+            if (loadingMsg) loadingMsg.remove();
+            
+            nextBatch.forEach(wall => {
+                const isFavorite = favorites.includes(wall.fullUrl);
+                const card = document.createElement('div');
+                card.style.display = 'inline-block';
+                card.style.width = '150px';
+                card.style.marginRight = '12px';
+                card.style.borderRadius = '16px';
+                card.style.overflow = 'hidden';
+                card.style.cursor = 'pointer';
+                card.style.position = 'relative';
+                card.onclick = () => openMedia(wall.fullUrl);
+                card.innerHTML = `<img src="${wall.url}" style="width:100%; height:120px; object-fit:cover;"><button class="favorite-btn ${isFavorite ? 'active' : ''}" style="position:absolute; top:5px; right:5px; width:28px; height:28px; font-size:14px;" onclick="event.stopPropagation(); toggleFavorite('${wall.fullUrl}', this)">❤️</button>`;
+                row.appendChild(card);
+            });
+            
+            rowLoadedCounts[rowId] += nextBatch.length;
+            const newRemaining = remainingResults.slice(20);
+            
+            if (newRemaining.length > 0) {
+                const newLoadMoreBtn = document.createElement('div');
+                newLoadMoreBtn.className = 'load-more-btn';
+                newLoadMoreBtn.innerHTML = `Load More (${newRemaining.length} left) →`;
+                newLoadMoreBtn.onclick = () => loadMoreRowWallpapers(query, rowId, newRemaining);
+                row.appendChild(newLoadMoreBtn);
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+    
+    async function loadPopularWallpapers() {
+        const grid = document.getElementById('popularGrid');
+        grid.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading popular wallpapers...</p></div>';
+        try {
+            const [pexels, pixabay] = await Promise.all([fetchFromPexels('popular', 1), fetchFromPixabay('popular', 1)]);
+            let results = [...pexels, ...pixabay];
+            results = results.filter((w, i, self) => i === self.findIndex(x => x.url === w.url));
+            grid.innerHTML = '';
+            results.forEach(wall => {
+                const isFavorite = favorites.includes(wall.fullUrl);
+                const card = document.createElement('div');
+                card.className = 'wallpaper-card';
+                card.onclick = () => openMedia(wall.fullUrl);
+                card.innerHTML = `<img src="${wall.url}" loading="lazy"><button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${wall.fullUrl}', this)">❤️</button>`;
+                grid.appendChild(card);
+            });
+        } catch(e) { grid.innerHTML = '<div class="error-message">Error loading.<br><button class="retry-btn" onclick="loadPopularWallpapers()">Retry</button></div>'; }
+    }
+    
+    async function searchWallpapers() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) return;
+        await loadCategoryWallpapers(query);
+    }
+    
+    // ========== UI FUNCTIONS ==========
+    function toggleMenu() {
+        document.getElementById('sideMenu').classList.toggle('open');
+        document.getElementById('menuOverlay').classList.toggle('show');
+    }
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+    }
+    
+    function openMedia(url) {
+        currentMediaUrl = url;
+        document.getElementById('modalImage').src = url;
+        document.getElementById('modal').classList.add('show');
+    }
+    
+    function closeModal() {
+        document.getElementById('modal').classList.remove('show');
+    }
+    
+    // ========== USER MANAGEMENT ==========
+    function loadUser() {
+        const savedUser = localStorage.getItem('wallpaper_user');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            favorites = currentUser.favorites || [];
+            downloadCount = currentUser.downloadCount || 0;
+            updateUI();
+        }
+    }
+    
+    function updateUI() {
+        if (currentUser) {
+            document.getElementById('menuAuthButtons').style.display = 'none';
+            document.getElementById('menuUserInfo').style.display = 'block';
+            document.getElementById('menuUserName').innerText = currentUser.name;
+            document.getElementById('menuAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('profileFavCount').innerText = favorites.length;
+            document.getElementById('profileDownloadCount').innerText = downloadCount;
+            document.getElementById('profileName').innerText = currentUser.name;
+            document.getElementById('profileAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('profileFavCount2').innerText = favorites.length;
+            document.getElementById('profileDownloadCount2').innerText = downloadCount;
+            document.getElementById('profileAuthBtn').style.display = 'none';
+            document.getElementById('profileLogoutBtn').style.display = 'block';
+        } else {
+            document.getElementById('menuAuthButtons').style.display = 'block';
+            document.getElementById('menuUserInfo').style.display = 'none';
+            document.getElementById('menuUserName').innerText = 'Guest';
+            document.getElementById('menuAvatar').innerText = 'G';
+            document.getElementById('profileName').innerText = 'Guest';
+            document.getElementById('profileAvatar').innerText = 'G';
+            document.getElementById('profileFavCount2').innerText = '0';
+            document.getElementById('profileDownloadCount2').innerText = downloadCount;
+            document.getElementById('profileAuthBtn').style.display = 'block';
+            document.getElementById('profileLogoutBtn').style.display = 'none';
+        }
+    }
+    
+    function updateProfileUI() { updateUI(); }
+    
+    function saveUserData() {
+        if (currentUser) {
+            currentUser.favorites = favorites;
+            currentUser.downloadCount = downloadCount;
+            localStorage.setItem('wallpaper_user', JSON.stringify(currentUser));
+            const users = JSON.parse(localStorage.getItem('wallpaper_users') || '{}');
+            if (users[currentUser.email]) {
+                users[currentUser.email].favorites = favorites;
+                users[currentUser.email].downloadCount = downloadCount;
+                localStorage.setItem('wallpaper_users', JSON.stringify(users));
+            }
+        }
+    }
+    
+    function toggleFavorite(url, btn) {
+        if (!currentUser) {
+            showToast('Sign in to save favorites!');
+            showAuthModal();
+            return;
+        }
+        const index = favorites.indexOf(url);
+        if (index === -1) {
+            favorites.push(url);
+            btn.classList.add('active');
+            showToast('❤️ Added to favorites');
+        } else {
+            favorites.splice(index, 1);
+            btn.classList.remove('active');
+            showToast('💔 Removed');
+        }
+        saveUserData();
+        updateUI();
+    }
+    
+    function showFavorites() {
+        const modal = document.createElement('div');
+        modal.className = 'auth-modal';
+        modal.id = 'favModal';
+        modal.style.display = 'flex';
+        let html = `<div class="auth-card" style="max-width:500px; max-height:80vh; overflow-y:auto;"><h2>❤️ My Favorites</h2>`;
+        if (favorites.length === 0) {
+            html += '<p style="text-align:center; padding:20px;">No favorites yet</p>';
+        } else {
+            html += '<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">';
+            favorites.forEach(url => {
+                html += `<div><img src="${url}" style="width:100%; border-radius:12px; cursor:pointer;" onclick="window.open('${url}')"><button style="margin-top:5px; background:#dc3545; color:white; border:none; padding:5px; border-radius:10px; width:100%;" onclick="removeFavorite('${url}')">Remove</button></div>`;
+            });
+            html += '</div>';
+        }
+        html += `<button class="close-auth" onclick="this.closest('.auth-modal').remove()" style="margin-top:15px;">Close</button></div>`;
+        modal.innerHTML = html;
+        document.body.appendChild(modal);
+    }
+    
+    function removeFavorite(url) {
+        const index = favorites.indexOf(url);
+        if (index !== -1) {
+            favorites.splice(index, 1);
+            saveUserData();
+            updateUI();
+            document.getElementById('favModal')?.remove();
+            showFavorites();
+            showToast('Removed from favorites');
+        }
+    }
+    
+    function showAuthModal() {
+        document.getElementById('authModal').classList.add('show');
+    }
+    
+    function closeAuthModal() {
+        document.getElementById('authModal').classList.remove('show');
+        document.getElementById('authName').style.display = 'none';
+        document.getElementById('authError').innerText = '';
+    }
+    
+    function toggleAuthMode() {
+        authMode = authMode === 'login' ? 'signup' : 'login';
+        const title = document.getElementById('authTitle');
+        const nameField = document.getElementById('authName');
+        const switchBtn = document.getElementById('switchAuth');
+        const actionBtn = document.getElementById('authActionBtn');
+        
+        if (authMode === 'signup') {
+            title.innerText = 'Create Account';
+            nameField.style.display = 'block';
+            switchBtn.innerText = 'Already have an account? Sign In';
+            actionBtn.innerText = 'Sign Up';
+        } else {
+            title.innerText = 'Sign In';
+            nameField.style.display = 'none';
+            switchBtn.innerText = "Don't have an account? Sign Up";
+            actionBtn.innerText = 'Sign In';
+        }
+    }
+    
+    function handleAuth() {
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        const name = document.getElementById('authName').value.trim();
+        const errorDiv = document.getElementById('authError');
+        
+        if (!email || !password) {
+            errorDiv.innerText = 'Email and password required';
+            return;
+        }
+        
+        const users = JSON.parse(localStorage.getItem('wallpaper_users') || '{}');
+        
+        if (authMode === 'signup') {
+            if (!name) {
+                errorDiv.innerText = 'Full name required';
+                return;
+            }
+            if (password.length < 4) {
+                errorDiv.innerText = 'Password must be at least 4 characters';
+                return;
+            }
+            if (users[email]) {
+                errorDiv.innerText = 'Email already registered';
+                return;
+            }
+            users[email] = { name, password, favorites: [], downloadCount: 0 };
+            localStorage.setItem('wallpaper_users', JSON.stringify(users));
+            currentUser = { email, name, favorites: [], downloadCount: 0 };
+            favorites = [];
+            localStorage.setItem('wallpaper_user', JSON.stringify(currentUser));
+            closeAuthModal();
+            updateUI();
+            showToast('Account created! Welcome ' + name);
+        } else {
+            const user = users[email];
+            if (!user || user.password !== password) {
+                errorDiv.innerText = 'Invalid email or password';
+                return;
+            }
+            currentUser = { email, name: user.name, favorites: user.favorites || [], downloadCount: user.downloadCount || 0 };
+            favorites = currentUser.favorites;
+            localStorage.setItem('wallpaper_user', JSON.stringify(currentUser));
+            closeAuthModal();
+            updateUI();
+            showToast('Welcome back ' + user.name + '!');
+        }
+    }
+    
+    function logout() {
+        localStorage.removeItem('wallpaper_user');
+        currentUser = null;
+        favorites = [];
+        updateUI();
+        showToast('Logged out');
+    }
+    
+    // ========== INITIALIZATION ==========
+    if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+    loadUser();
+    
+    // Load rows with optimized lazy loading
+    loadRowWallpapers('trending', 'trendingRow');
+    loadRowWallpapers('new', 'newArrivalsRow');
+    loadRowWallpapers('popular', 'popularRow');
+    loadRowWallpapers('editor choice', 'editorsChoiceRow');
+    loadPopularWallpapers();
+    
+    setTimeout(() => {
+        try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    }, 1000);
+</script>
+</body>
+</html>
