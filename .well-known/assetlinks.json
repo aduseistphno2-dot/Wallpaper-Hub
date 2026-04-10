@@ -1,10 +1,18 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "dev.pages.wallpaper_hub_as6.twa",
-    "sha256_cert_fingerprints": [
-      "C4:9F:93:37:18:BA:9C:A8:10:11:29:65:13:C6:B9:77:78:F5:52:0E:F1:DA:0B:3C:1F:CE:EA:E9:0B:4D:4F"
-    ]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.pages.wallpaper_hub_as6.twa",
+      "sha256_cert_fingerprints": ["C4:9F:93:37:18:BA:9C:A8:10:11:29:65:13:C6:B9:77:78:F5:52:0E:F1:DA:0B:3C:1F:CE:EA:E9:0B:4D:4F"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.pages.wallpaper_hub_as6.twa",
+      "sha256_cert_fingerprints": ["42:63:90:75:0F:E8:53:77:CE:0A:1F:03:82:93:4D:9F:C2:04:F2:A1:2E:09:98:57:B8:BB:89:7E:5F:97:C8:B6"]
+    }
   }
-}]
+]
